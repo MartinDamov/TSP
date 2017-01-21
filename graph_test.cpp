@@ -3,7 +3,17 @@
 #include "stdafx.h" // Required from Visual Studio
 #include "graph.h"
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <vector>
+
+//TODO: Add speicifcation about DIMACS format + add the website ot github. Website is in dissertation bookmark
+//TODO: Move manual_input and read_graph to graph.h and graph.cpp
+//TODO: Create a data structore for an edge, instead of using a vector of strings
+//TODO: Replace console output with exceptions. Check C++ exceptions
+//TODO: Check input of graph, mainly the substr statements if all info is get correcrtly
+//TODO: Fix input of graph as it can accept only vertices below 9 (because of substr statements)
+//TODO: Cannot construct a graph in read_graph. Error returned: variable corrupt
 
 /*
 	Manual input for a graph via the console.
@@ -17,7 +27,7 @@ Graph manual_input() {
 		int v1;
 		int v2;
 		double weight;
-		std::cout << "Enter edge (in the form of: v1, v2) and weight (-1 to exit): ";
+		std::cout << "Enter edge (in the form of: v1, v2) and weight (-1 -1 -1 to exit): ";
 		std::cin >> v1 >> v2 >> weight;
 		if (v1 <= 0) {
 			break;
@@ -27,6 +37,66 @@ Graph manual_input() {
 	
 	return graph;
 }
+
+/*
+	Read a graph file in DIMACS format.
+	Get as parameter a file name (as well as the format of the file, for example: test.txt or graph.gr)
+*/
+// Change to Graph read+graph(std::string name) {
+void read_graph(std::string name) {
+
+	// Open file
+	std::ifstream myfile(name);
+	std::string line;
+
+	int size = -1;
+	std::vector<std::string> edges;
+
+	if (myfile.is_open()) {
+		// Read line by line
+		while (getline(myfile, line)) {
+			if (line.substr(0, 1) == "p") {
+				// Get size
+				size = stoi(line.substr(2, 1));
+			}// end if
+			else if (line.substr(0, 1) == "a") {
+				// Get edges and add them to the vector
+				edges.push_back(line.substr(2));
+			}// end else if
+		}// end while
+
+		// Close file
+		myfile.close();
+	
+	}// end outer if
+	else {
+		std::cout << "Error! File could not be opened!" << std::endl;
+	}
+	/*
+	if (size != -1) {
+		// Construct a graph
+		Graph graph(size);
+
+		// Add edges
+		for (int i = 0; i < edges.size(); i++) {
+			// Get vertices and weight between them
+			std::string edge = edges[i];
+			int v1 = stoi(edge.substr(0, 1));
+			int v2 = stoi(edge.substr(2, 1));
+			double weight = stoi(edge.substr(4));
+
+			// Add the edge
+			graph.AddEdge(v1, v2, weight);
+		} // end for
+
+		//return graph;
+	} // end if
+	else {
+		std::cout << "Error! Size not defined in file!" << std::endl;
+	}
+	*/
+} // end read graph
+
 
 int main()
 {
@@ -60,9 +130,16 @@ int main()
 	std::cout << graph2.HasEdge(1, 2) << std::endl;
 	std::cout << graph2.GetEdgeWeight(1, 2) << std::endl;
 
+	read_graph("test.txt");
+
+	// Seperation line
+	std::cout << std::endl;
+
 	// Add pause so the console doesn't terminate
 	std::cout << "Press ENTER to continue... ";
 	std::cin.ignore();
+
+
 
     return 0;
 }
