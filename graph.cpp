@@ -1,7 +1,8 @@
-
 #include "stdafx.h" // Required from Visual Studio
 #include "graph.h"
+#include "edge.h"
 #include <iostream>
+#include <vector>
 
 //TODO: Check member function
 //TODO: Fix assignment operator
@@ -20,11 +21,13 @@ Graph::Graph(const int size) {
 	}// outer for
 }
 
+/*
 Graph::Graph(Graph &other) {
 	size_ = other.size();
 	Graph graph(size_);
 	int v1 = 0;
 	int v2 = 0;
+	/*
 	for (int i = 0; i < size_; i++) {
 		if (other.HasEdge(v1, v2)) {
 			double weight = other.GetEdgeWeight(v1, v2);
@@ -33,7 +36,9 @@ Graph::Graph(Graph &other) {
 		v1++;
 		v2++;
 	}
+
 }
+*/
 
 Graph::~Graph() {
 	std::cout << "~Graph() was invoked" << std::endl;
@@ -49,13 +54,13 @@ void Graph::AddEdge(const int v1, const int v2, const double weight) {
 	}
 	// If the edge is valid add the edge weight
 	else {
-		adjacency_matrix_[v1-1][v2-1] = weight;
+		adjacency_matrix_[v1 - 1][v2 - 1] = weight;
 	}
 }
 
 // Return the weight of the edge
 double Graph::GetEdgeWeight(const int v1, const int v2) {
-	return adjacency_matrix_[v1-1][v2-1];
+	return adjacency_matrix_[v1 - 1][v2 - 1];
 }
 
 // Return if vertices are connected
@@ -77,12 +82,30 @@ void Graph::display() const {
 	}// outer for
 }
 
+// Return a vector containing all edges of the graph
+std::vector<Edge> Graph::GetAllEdges() const
+{
+	std::vector<Edge> edges;
+
+	for (int i = 1; i < size_ + 1; i++) {
+		for (int j = 1; j < size_ + 1; j++) {
+			if (HasEdge(i, j)) {
+				Edge edge(i, j, adjacency_matrix_[i - 1][j - 1]);
+				edges.push_back(edge);
+			} // end if
+		} // end inner for
+	} // end outer for
+
+	return edges;
+}
+
 Graph &Graph::operator=(Graph &other) {
 	size_ = other.size();
 	size_ = other.size();
 	Graph graph(size_);
 	int v1 = 0;
 	int v2 = 0;
+	/*
 	for (int i = 0; i < size_; i++) {
 		if (other.HasEdge(v1, v2)) {
 			double weight = other.GetEdgeWeight(v1, v2);
@@ -91,6 +114,7 @@ Graph &Graph::operator=(Graph &other) {
 		v1++;
 		v2++;
 	}
+	*/
 	return graph;
 }
 

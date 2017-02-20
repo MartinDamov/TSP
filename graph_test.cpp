@@ -6,14 +6,16 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
-//TODO: Add speicifcation about DIMACS format + add the website ot github. Website is in dissertation bookmark
+//TODO: Implement custom next_permutation
+//TODO: Add speicification about DIMACS format + add the website ot github. Website is in dissertation bookmark
 //TODO: Move manual_input and read_graph to graph.h and graph.cpp
 //TODO: Create a data structore for an edge, instead of using a vector of strings
-//TODO: Replace console output with exceptions. Check C++ exceptions
-//TODO: Check input of graph, mainly the substr statements if all info is get correcrtly
+//TODO: Replace console output with exceptions
 //TODO: Fix input of graph as it can accept only vertices below 9 (because of substr statements)
 //TODO: Cannot construct a graph in read_graph. Error returned: variable corrupt
+//TODO: Change to pointers
 
 /*
 	Manual input for a graph via the console.
@@ -97,6 +99,20 @@ void read_graph(std::string name) {
 	*/
 } // end read graph
 
+double TSP_brute_force(Graph graph) {
+	
+	// Get all edges of the graph
+	std::vector<Edge> edges = graph.GetAllEdges();
+	int last = edges.size()-1;
+
+	// Create permutations
+	while (std::next_permutation(edges[0], edges[last])) {
+		// Check for min value
+		
+	}
+
+	return 21.0;
+}
 
 int main()
 {
@@ -124,13 +140,31 @@ int main()
 
 	// Display graph2
 	graph2.display();
+
+	// Seperation line
+	std::cout << std::endl;
+
+	// Test for member function GetAllEdges
+	std::vector<Edge> edges = graph2.GetAllEdges();
+	for (int i = 0; i < edges.size(); i++) {
+		std::cout << edges[i].getVertex1() << " " 
+			<< edges[i].getVertex2() << std::endl;
+	}
+
+	// Seperation line
+	std::cout << std::endl;
 	
+	double test = TSP_brute_force(graph1);
+
+	// Seperation line
+	std::cout << std::endl;
+
 	// Checks for Graph member functions
 	std::cout << graph2.HasEdge(1, 1) << std::endl;
 	std::cout << graph2.HasEdge(1, 2) << std::endl;
 	std::cout << graph2.GetEdgeWeight(1, 2) << std::endl;
 
-	read_graph("test.txt");
+	//read_graph("test.txt");
 
 	// Seperation line
 	std::cout << std::endl;

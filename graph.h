@@ -3,6 +3,8 @@
 #define GRAPH_H
 
 #include "stdafx.h" // Required from Visual Studio
+#include "edge.h"
+#include <vector>
 
 /** 
 	This is a representation of an
@@ -15,7 +17,7 @@ class Graph {
 public:
 
 	Graph(const int size);
-	Graph(Graph &other);
+	//Graph(Graph &other);
 	~Graph();
 
 	int size() const;
@@ -24,6 +26,7 @@ public:
 	bool HasEdge(const int v1, const int v2) const;
 	void RemoveEdge(const int v1, const int v2);
 	void display() const;
+	std::vector<Edge> GetAllEdges() const;
 
 	Graph &operator=(Graph &other);
 
