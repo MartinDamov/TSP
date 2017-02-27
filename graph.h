@@ -1,8 +1,7 @@
-
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "stdafx.h" // Required from Visual Studio
+#include "stdafx.h"
 #include "edge.h"
 #include <vector>
 
@@ -29,6 +28,9 @@ public:
 	std::vector<Edge> GetAllEdges() const;
 
 	Graph &operator=(Graph &other);
+	Graph manual_input();
+	// Change to return a Graph
+	void read_graph(std::string name);
 
 private:
 	// Default size for an matrix
