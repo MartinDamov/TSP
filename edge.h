@@ -1,4 +1,3 @@
-
 #ifndef EDGE_H
 #define EDGE_H
 
@@ -14,9 +13,11 @@ public:
 	Edge(int v1, int v2, double weight);
 	~Edge();
 
-	int getVertex1();
-	int getVertex2();
-	double getWeight();
+	const int getVertex1();
+	const int getVertex2();
+	const double getWeight();
+
+	friend bool operator==(const Edge &edge1, const Edge &edge2);
 
 private:
 	// Vertex 1

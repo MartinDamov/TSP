@@ -14,8 +14,15 @@ Edge::~Edge()
 {
 }
 
-int Edge::getVertex1() { return v1_; }
+const int Edge::getVertex1() { return v1_; }
 
-int Edge::getVertex2() { return v2_; }
+const int Edge::getVertex2() { return v2_; }
 
-double Edge::getWeight() { return weight_; }
+const double Edge::getWeight() { return weight_; }
+
+bool operator==(const Edge &edge1, const Edge &edge2) {
+	if (edge1.v1_ == edge2.v2_ && edge1.v1_ == edge2.v2_) {
+		return true;
+	}
+	return false;
+}
