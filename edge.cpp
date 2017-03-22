@@ -3,15 +3,11 @@
 #include <iostream>
 
 
-Edge::Edge(int v1, int v2, double weight)
-{
-	v1_ = v1;
-	v2_ = v2;
-	weight_ = weight;
-}
+Edge::Edge(const int v1, const int v2, const double weight):
+	v1_(v1), v2_(v2), weight_(weight)
+	{}
 
-Edge::~Edge()
-{
+Edge::~Edge() {
 }
 
 const int Edge::getVertex1() { return v1_; }
