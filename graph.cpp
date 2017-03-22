@@ -1,16 +1,11 @@
-#include "stdafx.h" // Required from Visual Studio
-#include "graph.h"
-#include "edge.h"
-#include <iostream>
+#include "stdafx.h"
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iostream>
+#include "graph.h"
+#include "edge.h"
 
-//TODO: Check member function
-//TODO: Fix assignment operator
-//TODO: Fix copy constructor
-//TODO: Fix read_graph as it can accept only vertices below 9 (because of substr statements)
-//TODO: Cannot construct a graph in read_graph. Error returned: variable corrupt
 
 Graph::Graph(const int size) {
 	size_ = size;
@@ -21,18 +16,16 @@ Graph::Graph(const int size) {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			adjacency_matrix_[i][j] = 0;
-		}// inner for
-	}// outer for
+		}
+	}
 }
 
-/*
 Graph::Graph(Graph &other) {
 	size_ = other.size();
 	Graph graph(size_);
 	int v1 = 0;
 	int v2 = 0;
-	/*
-	for (int i = 0; i < size_; i++) {
+	for (int i = 0; i <= size_; i++) {
 		if (other.HasEdge(v1, v2)) {
 			double weight = other.GetEdgeWeight(v1, v2);
 			graph.AddEdge(v1, v2, weight);
@@ -40,17 +33,14 @@ Graph::Graph(Graph &other) {
 		v1++;
 		v2++;
 	}
-
 }
-*/
 
 Graph::~Graph() {
 	std::cout << "~Graph() was invoked" << std::endl;
 }
 
-int Graph::size() const { return size_; }
+const int Graph::size() const { return size_; }
 
-// Add an edge
 void Graph::AddEdge(const int v1, const int v2, const double weight) {
 	// Check if edge is valid (if vertices and edge weight are correct)
 	if (v1 > size_ || v2 > size_ || v1 <= 0 || v2 <= 0 || v1 == v2 || weight <= 0 || HasEdge(v1, v2)) {
@@ -63,7 +53,7 @@ void Graph::AddEdge(const int v1, const int v2, const double weight) {
 }
 
 // Return the weight of the edge
-double Graph::GetEdgeWeight(const int v1, const int v2) {
+const double Graph::GetEdgeWeight(const int v1, const int v2) {
 	return adjacency_matrix_[v1 - 1][v2 - 1];
 }
 
@@ -81,7 +71,7 @@ void Graph::display() const {
 	for (int i = 0; i < size_; i++) {
 		for (int j = 0; j < size_; j++) {
 			std::cout << adjacency_matrix_[i][j] << " ";
-		} // inner for
+		}
 		std::cout << std::endl;
 	}// outer for
 }
@@ -110,7 +100,6 @@ Graph &Graph::operator=(Graph &other) {
 	Graph graph(size_);
 	int v1 = 0;
 	int v2 = 0;
-	/*
 	for (int i = 0; i < size_; i++) {
 		if (other.HasEdge(v1, v2)) {
 			double weight = other.GetEdgeWeight(v1, v2);
@@ -119,13 +108,10 @@ Graph &Graph::operator=(Graph &other) {
 		v1++;
 		v2++;
 	}
-	*/
 	return graph;
 }
 
-/*
-	Manual input for a graph via the console.
-*/
+// Manual input for a graph via the console.
 Graph Graph::manual_input() {
 	int size;
 	std::cout << "Enter number of vertices: ";
@@ -146,12 +132,11 @@ Graph Graph::manual_input() {
 	return graph;
 }
 
-/*
-Read a graph file in DIMACS format.
-Get as parameter a file name (as well as the format of the file, for example: test.txt or graph.gr)
+/**
+	Read a graph file in DIMACS format.
+	Get as parameter a file name (as well as the format of the file, for example: test.txt or graph.gr)
 */
-// Change to Graph read+graph(std::string name) {
-void Graph::read_graph(std::string name) {
+Graph Graph::read_graph(std::string name) {
 
 	// Open file
 	std::ifstream myfile(name);
@@ -161,46 +146,48 @@ void Graph::read_graph(std::string name) {
 	std::vector<std::string> edges;
 
 	if (myfile.is_open()) {
-		// Read line by line
 		while (getline(myfile, line)) {
 			if (line.substr(0, 1) == "p") {
 				// Get size
 				size = stoi(line.substr(2, 1));
-			}// end if
+			}
 			else if (line.substr(0, 1) == "a") {
 				// Get edges and add them to the vector
 				edges.push_back(line.substr(2));
-			}// end else if
+			}
 		}// end while
 
-		 // Close file
 		myfile.close();
-
 	}// end outer if
 	else {
 		std::cout << "Error! File could not be opened!" << std::endl;
+		abort();
 	}
-	/*
+
 	if (size != -1) {
-	// Construct a graph
-	Graph graph(size);
+		Graph graph(size);
 
-	// Add edges
-	for (int i = 0; i < edges.size(); i++) {
-		// Get vertices and weight between them
-		std::string edge = edges[i];
-		int v1 = stoi(edge.substr(0, 1));
-		int v2 = stoi(edge.substr(2, 1));
-		double weight = stoi(edge.substr(4));
+		// Add edges
+		for (unsigned i = 0; i < edges.size(); i++) {
+			// Get vertices and weight between them
+			std::string edge = edges[i];
+			char delimiter(' ');
+			std::string v1_ = edge.substr(0, edge.find(delimiter));
+			std::string v2_ = edge.substr(v1_.length() - 1, edge.find(delimiter));
+			std::string weight_ = edge.substr(v2_.length() - 1, edge.find(delimiter));;
+			int v1 = stoi(v1_);
+			int v2 = stoi(v2_);
+			double weight = stoi(weight_);
 
-		// Add the edge
-		graph.AddEdge(v1, v2, weight);
-	} // end for
+			// Add the edge
+			graph.AddEdge(v1, v2, weight);
+		}
 
-	//return graph;
-	} // end if
+		return graph;
+	} 
 	else {
 		std::cout << "Error! Size not defined in file!" << std::endl;
+		abort();
 	}
-	*/
+
 } // end read graph

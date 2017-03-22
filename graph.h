@@ -2,8 +2,9 @@
 #define GRAPH_H
 
 #include "stdafx.h"
-#include "edge.h"
+#include <iostream>
 #include <vector>
+#include "edge.h"
 
 /** 
 	This is a representation of an
@@ -16,12 +17,12 @@ class Graph {
 public:
 
 	Graph(const int size);
-	//Graph(Graph &other);
+	Graph(Graph &other);
 	~Graph();
 
-	int size() const;
+	const int size() const;
 	void AddEdge(const int v1, const int v2, const double weight);
-	double GetEdgeWeight(const int v1, const int v2);
+	const double GetEdgeWeight(const int v1, const int v2);
 	bool HasEdge(const int v1, const int v2) const;
 	void RemoveEdge(const int v1, const int v2);
 	void display() const;
@@ -29,17 +30,14 @@ public:
 
 	Graph &operator=(Graph &other);
 	Graph manual_input();
-	// Change to return a Graph
-	void read_graph(std::string name);
+	Graph read_graph(std::string name);
 
 private:
 	// Default size for an matrix
 	static const int DEFAULT_SIZE = 5;
 	int size_;
-	// An two-dimensional array for holding an undricted weighted graph
 	double adjacency_matrix_[DEFAULT_SIZE][DEFAULT_SIZE];
 };
 
 
 #endif // GRAPH
-
