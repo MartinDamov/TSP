@@ -5,12 +5,11 @@
 This is a representation of an edge
 */
 
-class Edge
-{
+class Edge {
 
 public:
 
-	Edge(int v1, int v2, double weight);
+	Edge(const int v1, const int v2, const double weight);
 	~Edge();
 
 	const int getVertex1();
@@ -20,11 +19,9 @@ public:
 	friend bool operator==(const Edge &edge1, const Edge &edge2);
 
 private:
-	// Vertex 1
-	int v1_;
-	// Vertex 1
-	int v2_;
-	double weight_;
+	const int v1_;
+	const int v2_;
+	const double weight_;
 };
 
 #endif // EDGE
