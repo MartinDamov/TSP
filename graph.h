@@ -32,8 +32,6 @@ public:
 	Graph manual_input();
 	Graph read_graph(std::string name);
 
-private:
-	// Default size for an matrix
 	static const int DEFAULT_SIZE = 5;
 	int size_;
 	double adjacency_matrix_[DEFAULT_SIZE][DEFAULT_SIZE];
