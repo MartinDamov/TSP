@@ -9,7 +9,6 @@
 
 Graph::Graph(const int size) {
 	size_ = size;
-	// Create an array to hold the matrix
 	adjacency_matrix_[size][size];
 	
 	// Fill the adjacency matrix with zeros
@@ -49,6 +48,7 @@ void Graph::AddEdge(const int v1, const int v2, const double weight) {
 	// If the edge is valid add the edge weight
 	else {
 		adjacency_matrix_[v1 - 1][v2 - 1] = weight;
+		adjacency_matrix_[v2 - 1][v1 - 1] = weight;
 	}
 }
 
