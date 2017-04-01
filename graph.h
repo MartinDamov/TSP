@@ -18,6 +18,7 @@ public:
 
 	Graph(const int size);
 	Graph(Graph &other);
+	Graph(std::string name);
 	~Graph();
 
 	const int size() const;
@@ -30,7 +31,6 @@ public:
 
 	Graph &operator=(Graph &other);
 	Graph manual_input();
-	Graph read_graph(std::string name);
 
 	static const int DEFAULT_SIZE = 5;
 	int size_;

@@ -1,29 +1,51 @@
 #include "stdafx.h"
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <numeric>
+#include <limits>
 #include "graph.h"
-#include "edge.h"
 #include "TSP.h"
 
-//TODO: Test permute function
+std::vector<int> path_brute_force(1);
 
-double TSP_brute_force(Graph & graph) {
-	
-	// Get all edges of the graph
-	std::vector<Edge> edges = graph.GetAllEdges();
-	int last = edges.size() - 1;
+double TSP_brute_force(Graph &graph) {
+	int size = graph.size();
+	std::vector<int> route(size);
 
-	// Create permutations and check for min value
-	std::vector<double> min_weight;
-	double total_weight = 0;
+	// Fill the range with sequentially increasing values
+	std::iota(route.begin(), route.end(), 0);
+
+	double best_distance = std::numeric_limits<double>::max();
+
+	// Use std::next_permutation to check all possible cases and find best route
 	do {
-		for (Edge edge : edges) {
-			total_weight += edge.getWeight();
-		}
-		min_weight.push_back(total_weight);
-	} while (std::next_permutation(edges.begin(), edges.end()));
+		path_brute_force.clear();
+		double distance = 0.0;
+		for (auto i = 1; i < route.size(); i++) {
 
-	// Sort the vector the return the first (min) path
-	std::sort(min_weight.begin(), min_weight.end());
-	return min_weight[0];
+			// Calculate distance
+			distance += graph.adjacency_matrix_[route[i - 1]][route[i]];
+			path_brute_force.push_back(route[i]);
+
+			// Stop if the distance is worse the best saved one
+			if (distance > best_distance) {
+				path_brute_force.clear();
+				break;
+			}
+		}
+
+		// Check if better solutions was found (lower distance)
+		distance += graph.adjacency_matrix_[route[size - 1]][0];
+		if (distance < best_distance) {
+			best_distance = distance;
+		}
+
+	} while (std::next_permutation(route.begin() + 1, route.end()));
+
+	return best_distance;
+}
+
+std::vector<int> TSP_brute_force_path() {
+	return path_brute_force;
 }

@@ -136,16 +136,17 @@ Graph Graph::manual_input() {
 	Read a graph file in DIMACS format.
 	Get as parameter a file name (as well as the format of the file, for example: test.txt or graph.gr)
 */
-Graph Graph::read_graph(std::string name) {
+Graph::Graph(std::string name) {
 
 	// Open file
 	std::ifstream myfile(name);
 	std::string line;
 
-	int size = -1;
-	std::vector<std::string> edges;
+	int size = -1, v1, v2, weight;
+	std::vector<Edge> edges;
+	char a;
 
-	if (myfile.is_open()) {
+	if (!myfile.fail()) {
 		while (getline(myfile, line)) {
 			if (line.substr(0, 1) == "p") {
 				// Get size
@@ -153,7 +154,8 @@ Graph Graph::read_graph(std::string name) {
 			}
 			else if (line.substr(0, 1) == "a") {
 				// Get edges and add them to the vector
-				edges.push_back(line.substr(2));
+				myfile >> a >> v1 >> v2 >> weight;
+				edges.push_back(Edge(v1, v2, weight));
 			}
 		}// end while
 
@@ -168,23 +170,16 @@ Graph Graph::read_graph(std::string name) {
 		Graph graph(size);
 
 		// Add edges
-		for (unsigned i = 0; i < edges.size(); i++) {
-			// Get vertices and weight between them
-			std::string edge = edges[i];
-			char delimiter(' ');
-			std::string v1_ = edge.substr(0, edge.find(delimiter));
-			std::string v2_ = edge.substr(v1_.length() - 1, edge.find(delimiter));
-			std::string weight_ = edge.substr(v2_.length() - 1, edge.find(delimiter));;
-			int v1 = stoi(v1_);
-			int v2 = stoi(v2_);
-			double weight = stoi(weight_);
+		for (auto i = 0; i < edges.size(); i++) {
+			int v1 = edges[i].getVertex1();
+			int v2 = edges[i].getVertex2();
+			double weight = edges[i].getWeight();
 
 			// Add the edge
 			graph.AddEdge(v1, v2, weight);
 		}
 
-		return graph;
-	} 
+	}
 	else {
 		std::cout << "Error! Size not defined in file!" << std::endl;
 		abort();
