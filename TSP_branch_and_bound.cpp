@@ -10,7 +10,8 @@
 int size;
 const int DEFAULT_SIZE = 5;
 double adjacency_matrix[DEFAULT_SIZE][DEFAULT_SIZE];
-std::vector<int> visited(4);
+std::vector<int> visited;
+std::vector<int> path;
 double distance = 0;
 
 // Get the needed data from the graph
@@ -30,11 +31,13 @@ void TSP_branch_and_bound_set_graph(Graph &graph) {
 void TSP_branch_and_bound_minimum_cost(int vertex) {
 	int nearest_vertex;
 	visited[vertex] = 1;
-
+	// Add to the path
+	path.push_back(vertex + 1);
 	// Get nearest vertex
 	nearest_vertex = TSP_branch_and_bound(vertex);
 	if (nearest_vertex == std::numeric_limits<int>::max()) {
 		nearest_vertex = 0;
+		path.push_back(nearest_vertex + 1);
 		distance += adjacency_matrix[vertex][nearest_vertex];
 		return;
 	}
@@ -73,4 +76,8 @@ int TSP_branch_and_bound(int vertex) {
 double TSP_branch_and_bound_distance() {
 	TSP_branch_and_bound_minimum_cost(0);
 	return distance;
+}
+
+std::vector<int> TSP_branch_and_bound_path() {
+	return path;
 }
