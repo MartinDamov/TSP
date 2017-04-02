@@ -16,9 +16,10 @@ class Graph {
 
 public:
 
+	Graph(); // manual input
 	Graph(const int size);
 	Graph(Graph &other);
-	Graph(std::string name);
+	Graph(std::string name); // read from a file
 	~Graph();
 
 	const int size() const;
@@ -30,7 +31,6 @@ public:
 	std::vector<Edge> GetAllEdges() const;
 
 	Graph &operator=(Graph &other);
-	Graph manual_input();
 
 	static const int DEFAULT_SIZE = 5;
 	int size_;

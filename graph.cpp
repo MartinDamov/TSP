@@ -112,11 +112,19 @@ Graph &Graph::operator=(Graph &other) {
 }
 
 // Manual input for a graph via the console.
-Graph Graph::manual_input() {
+Graph::Graph() {
 	int size;
 	std::cout << "Enter number of vertices: ";
 	std::cin >> size;
-	Graph graph(size);
+	size_ = size;
+
+	// Fill the adjacency matrix with zeros
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			adjacency_matrix_[i][j] = 0;
+		}
+	}
+
 	for (int i = 0; i < size; i++) {
 		int v1;
 		int v2;
@@ -126,10 +134,13 @@ Graph Graph::manual_input() {
 		if (v1 <= 0) {
 			break;
 		}
-		graph.AddEdge(v1, v2, weight);
+		if (v1 > 0 && v2 > 0 && weight >= 0.1) {
+			
+			// Add the edge
+			adjacency_matrix_[v1 - 1][v2 - 1] = weight;
+			adjacency_matrix_[v2 - 1][v1 - 1] = weight;
+		}
 	}
-
-	return graph;
 }
 
 /**
@@ -156,6 +167,7 @@ Graph::Graph(std::string name) {
 				// Get edges and add them to the vector
 				myfile >> a >> v1 >> v2 >> weight;
 				edges.push_back(Edge(v1, v2, weight));
+				std::cout << v1 << " " << v2 << " " << weight << std::endl;
 			}
 		}// end while
 
@@ -167,17 +179,29 @@ Graph::Graph(std::string name) {
 	}
 
 	if (size != -1) {
-		Graph graph(size);
+		size_ = size;
+
+
+		// Fill the adjacency matrix with zeros
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				adjacency_matrix_[i][j] = 0;
+			}
+		}
 
 		// Add edges
 		for (auto i = 0; i < edges.size(); i++) {
 			int v1 = edges[i].getVertex1();
 			int v2 = edges[i].getVertex2();
 			double weight = edges[i].getWeight();
-
+			/*
 			// Add the edge
-			graph.AddEdge(v1, v2, weight);
+			adjacency_matrix_[v1 - 1][v2 - 1] = weight;
+			adjacency_matrix_[v2 - 1][v1 - 1] = weight;
+			*/
+			std::cout << "adding: " << v1 << " " << v2 << " " << weight << std::endl;
 		}
+
 
 	}
 	else {
