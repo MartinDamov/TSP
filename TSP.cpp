@@ -13,7 +13,13 @@ double distance_brute_force = 0.0;
 double TSP_brute_force(Graph &graph) {
 
 	// Try to construct a hamiltonian cycle
-	hamiltonianCycle(graph);
+	if (hamiltonianCycle(graph)) {
+
+		// Calculate the distance
+		for (int i = 1; i < path_brute_force.size(); i++) {
+			distance_brute_force += graph.adjacency_matrix_[path_brute_force[i - 1]][path_brute_force[i]];
+		}
+	}
 	return distance_brute_force;
 }
 
@@ -32,6 +38,14 @@ bool hamiltonianCycle(Graph &graph) {
 		std::cout << "Exact solution can't be found! There isn't Hamiltonian cycle!" << std::endl;
 		return false;
 	}
+
+	// Change the vertex number from 0 to 1
+	// (0 is used for the purpose of solving the task)
+	path_brute_force[0] = 1;
+
+	// Add the start vertex at the end to finish the connection
+	// (This step is omited when adding to the path)
+	path_brute_force.push_back(path_brute_force[0]);
 
 	return true;
 }
@@ -85,6 +99,10 @@ bool canAddVertex(int vertex, Graph &graph, std::vector<int> path, int pos) {
 }
 
 /*
+
+Alternative implementation using std::next_permutation
+Note it is not tested and will not work due to variable names changed
+
 double TSP_brute_force(Graph &graph) {
 	int size = graph.size();
 	std::vector<int> route(size);
@@ -123,12 +141,5 @@ double TSP_brute_force(Graph &graph) {
 }
 */
 std::vector<int> TSP_brute_force_path() {
-	// Change the vertex number from 0 to 1
-	// (0 is used for the purpose of solving the task)
-	path_brute_force[0] = 1;
-	
-	// Add the start vertex at the end to finish the connection
-	// (This step is omited when adding to the path)
-	path_brute_force.push_back(path_brute_force[0]);
 	return path_brute_force;
 }
