@@ -8,18 +8,34 @@
 #include "TSP.h"
 
 std::vector<int> path_brute_force;
-double distance_brute_force = 0.0;
+double distance_brute_force = std::numeric_limits<double>::max();
 
 double TSP_brute_force(Graph &graph) {
 
 	// Try to construct a hamiltonian cycle
 	if (hamiltonianCycle(graph)) {
+		std::sort(path_brute_force.begin()+1, path_brute_force.end()-1);
+		do {
+			double distance = 0.0;
+			for (int i = 0; i < path_brute_force.size(); i++) {
+				std::cout << path_brute_force[i] << " ";
+				if (i > 0) {
+					distance += graph.GetEdgeWeight(path_brute_force[i - 1], path_brute_force[i]);
+				}		
+			}
 
-		// Calculate the distance
-		for (int i = 1; i < path_brute_force.size(); i++) {
-			distance_brute_force += graph.adjacency_matrix_[path_brute_force[i - 1]][path_brute_force[i]];
-		}
+			// Add distance from the start vertex to the second
+			distance += graph.GetEdgeWeight(path_brute_force[0], path_brute_force[1]);
+
+			// Set best path
+			if (distance < distance_brute_force) {
+				distance_brute_force = distance;
+			}
+
+			std::cout << "dis: " << distance << std::endl;
+		} while (std::next_permutation(path_brute_force.begin() + 1, path_brute_force.end() - 1));
 	}
+
 	return distance_brute_force;
 }
 
@@ -98,48 +114,6 @@ bool canAddVertex(int vertex, Graph &graph, std::vector<int> path, int pos) {
 	return true;
 }
 
-/*
-
-Alternative implementation using std::next_permutation
-Note it is not tested and will not work due to variable names changed
-
-double TSP_brute_force(Graph &graph) {
-	int size = graph.size();
-	std::vector<int> route(size);
-
-	// Fill the range with sequentially increasing values
-	std::iota(route.begin(), route.end(), 0);
-
-	double best_distance = std::numeric_limits<double>::max();
-
-	// Use std::next_permutation to check all possible cases and find best route
-	do {
-		path_brute_force.clear();
-		double distance = 0.0;
-		for (auto i = 1; i < route.size(); i++) {
-
-			// Calculate distance
-			distance += graph.adjacency_matrix_[route[i - 1]][route[i]];
-			path_brute_force.push_back(route[i]);
-
-			// Stop if the distance is worse than best saved one
-			if (distance > best_distance) {
-				path_brute_force.clear();
-				break;
-			}
-		}
-
-		// Check if better solutions was found (lower distance)
-		distance += graph.adjacency_matrix_[route[size - 1]][0];
-		if (distance < best_distance) {
-			best_distance = distance;
-		}
-
-	} while (std::next_permutation(route.begin() + 1, route.end()));
-
-	return best_distance;
-}
-*/
 std::vector<int> TSP_brute_force_path() {
 	return path_brute_force;
 }
