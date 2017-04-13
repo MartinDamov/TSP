@@ -14,14 +14,13 @@ double TSP_brute_force(Graph &graph) {
 
 	// Try to construct a hamiltonian cycle
 	if (hamiltonianCycle(graph)) {
+
+		// Sort the vertices so next_permutation could 
 		std::sort(path_brute_force.begin()+1, path_brute_force.end()-1);
 		do {
 			double distance = 0.0;
-			for (int i = 0; i < path_brute_force.size(); i++) {
-				std::cout << path_brute_force[i] << " ";
-				if (i > 0) {
-					distance += graph.GetEdgeWeight(path_brute_force[i - 1], path_brute_force[i]);
-				}		
+			for (int i = 1; i < path_brute_force.size(); i++) {
+				distance += graph.GetEdgeWeight(path_brute_force[i - 1], path_brute_force[i]);	
 			}
 
 			// Add distance from the start vertex to the second
@@ -32,7 +31,6 @@ double TSP_brute_force(Graph &graph) {
 				distance_brute_force = distance;
 			}
 
-			std::cout << "dis: " << distance << std::endl;
 		} while (std::next_permutation(path_brute_force.begin() + 1, path_brute_force.end() - 1));
 	}
 

@@ -41,6 +41,7 @@ void TSP_branch_and_bound_minimum_cost(int vertex) {
 		distance += adjacency_matrix[vertex][nearest_vertex];
 		return;
 	}
+	
 	// Recursive call
 	TSP_branch_and_bound_minimum_cost(nearest_vertex);
 }
@@ -58,8 +59,7 @@ int TSP_branch_and_bound(int vertex) {
 
 			// Check for better solution
 			if (adjacency_matrix[vertex][count] < minimum) {
-				minimum = adjacency_matrix[count][0] +
-					adjacency_matrix[vertex][count];
+				minimum = adjacency_matrix[count][0] + adjacency_matrix[vertex][count];
 			}
 			// Set nearest vertex
 			temp = adjacency_matrix[vertex][count];
