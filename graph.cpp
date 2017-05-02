@@ -96,7 +96,6 @@ std::vector<Edge> Graph::GetAllEdges() const
 
 Graph &Graph::operator=(Graph &other) {
 	size_ = other.size();
-	size_ = other.size();
 	Graph graph(size_);
 	int v1 = 0;
 	int v2 = 0;
