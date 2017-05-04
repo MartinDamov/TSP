@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 #include "graph.h"
 #include "TSP.h"
 #include "TSP_branch_and_bound.h"
@@ -23,6 +24,9 @@ void showExample() {
 	// Seperation line
 	std::cout << std::endl;
 
+	// Detect time for brute force
+	auto start_brute_force = std::chrono::high_resolution_clock::now();
+
 	// Brute force
 	double distance_example = TSP_brute_force(graph);
 	std::cout << "TSP brute force distance: " << distance_example << std::endl;
@@ -32,9 +36,18 @@ void showExample() {
 		std::cout << path_example[i] << " ";
 	}
 
+	auto end_brute_force = std::chrono::high_resolution_clock::now();
+	
+	std::chrono::duration<double, std::milli> duration_brute_force = start_brute_force - end_brute_force;
+	std::cout << "\n\nTime elapsed for TSP brute force: " << duration_brute_force.count();
+
+
 	// Seperation lines
 	std::cout << std::endl;
 	std::cout << std::endl;
+
+	// Detect time for branch and bound
+	auto start_branch_bound = std::chrono::high_resolution_clock::now();
 
 	// Branch and bound 
 	TSP_branch_and_bound_set_graph(graph);
@@ -45,6 +58,11 @@ void showExample() {
 	for (auto i = 0; i < path.size(); i++) {
 		std::cout << path[i] << " ";
 	}
+
+	auto end_branch_bound = std::chrono::high_resolution_clock::now();
+
+	std::chrono::duration<double, std::milli> duration_branch_bound = start_branch_bound - end_branch_bound;
+	std::cout << "\n\nTime elapsed for TSP branch and bound: " << duration_branch_bound.count();
 
 	// Seperation line
 	std::cout << std::endl;
