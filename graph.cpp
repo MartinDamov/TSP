@@ -123,15 +123,13 @@ Graph::Graph(std::string name) {
 		}
 
 		// Add edges
-		for (auto i = 0; i < cities.size()-1; i++) {
-			//double dis = calculate_distance(cities[i].getXCord(), cities[i].getYCord(), cities[i+1].getXCord(), cities[i+1].getXCord());
-			double dis = pow((cities[i].getXCord() - cities[i].getYCord()), 2) + pow((cities[i + 1].getXCord() - cities[i + 1].getXCord()), 2);
-			// Add the edge
-			std::cout << cities[i].getXCord() << " " <<  cities[i].getYCord() << std::endl;
-			std::cout << sqrt(dis) << std::endl;
-			//adjacency_matrix_[cities[i].getNumber() - 1][cities[i+1].getNumber()- 1] = dis;
-			//adjacency_matrix_[cities[i+1].getNumber() - 1][cities[i].getNumber() - 1] = dis;
-
+		for (auto i = 0; i < cities.size(); i++) {
+			for (auto j = 1; j < cities.size(); j++) {
+				// Calculate the distance between two points using Pitagareous
+				double dis = pow((cities[j].getXCord() - cities[i].getXCord()), 2) + pow((cities[j].getYCord() - cities[i].getYCord()), 2);
+				adjacency_matrix_[cities[i].getNumber() - 1][cities[j].getNumber() - 1] = sqrt(dis);
+				adjacency_matrix_[cities[j].getNumber() - 1][cities[i].getNumber() - 1] = sqrt(dis);
+			}
 		}
 		
 	}
@@ -142,13 +140,6 @@ Graph::Graph(std::string name) {
 
 } // end read graph
 
-  /*
-  Calculate distance between two coordinate points
-  */
-double calculate_distance(double xCord_v1, double yCord_v1, double xCord_v2, double yCord_v2) {
-	double distance = pow((xCord_v1 + yCord_v1), 2) + pow((xCord_v2 + yCord_v2), 2);
-	return distance;
-}
 
 const int Graph::size() const { return size_; }
 
@@ -166,7 +157,7 @@ void Graph::AddEdge(const int v1, const int v2, const double weight) {
 
 // Return the weight of the edge
 const double Graph::GetEdgeWeight(const int v1, const int v2) {
-	return adjacency_matrix_[v1 - 1][v2 - 1];
+	return adjacency_matrix_[v1][v2];
 }
 
 // Return if vertices are connected

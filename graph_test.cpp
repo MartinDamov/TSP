@@ -6,7 +6,8 @@
 #include <chrono>
 #include "graph.h"
 #include "TSP.h"
-#include "TSP_branch_and_bound.h"
+#include "TSP_NN.h"
+
 
 /**
 	An example showing how the program works. All the output is displayed to the console
@@ -14,9 +15,12 @@
 void showExample() {
 	
 	// Construct graphs, add edges to them and display them in console
-	Graph graph(3);
+	Graph graph(4);
 	graph.AddEdge(1, 2, 10);
-	graph.AddEdge(2, 3, 15);
+	graph.AddEdge(1, 3, 10);
+	graph.AddEdge(2, 3, 5);
+	graph.AddEdge(1, 4, 20);
+	graph.AddEdge(2, 4, 5);
 	
 	std::cout << "The following graph will be used to demonstrate the methods:" << std::endl;
 	graph.display();
@@ -28,19 +32,12 @@ void showExample() {
 	auto start_brute_force = std::chrono::high_resolution_clock::now();
 
 	// Brute force
-	double distance_example = TSP_brute_force(graph);
-	std::cout << "TSP brute force distance: " << distance_example << std::endl;
-	std::vector<int> path_example = TSP_brute_force_path();
-	std::cout << "TSP brute force path: ";
-	for (int i = 0; i < path_example.size(); i++) {
-		std::cout << path_example[i] << " ";
-	}
+	std::cout << "Brute force distance: " << TSP_brute_force(graph) << std::endl;
 
 	auto end_brute_force = std::chrono::high_resolution_clock::now();
 	
 	std::chrono::duration<double, std::milli> duration_brute_force = start_brute_force - end_brute_force;
 	std::cout << "\n\nTime elapsed for TSP brute force: " << duration_brute_force.count();
-
 
 	// Seperation lines
 	std::cout << std::endl;
@@ -49,15 +46,8 @@ void showExample() {
 	// Detect time for branch and bound
 	auto start_branch_bound = std::chrono::high_resolution_clock::now();
 
-	// Branch and bound 
-	TSP_branch_and_bound_set_graph(graph);
-	double distance = TSP_branch_and_bound_distance();
-	std::cout << "TSP branch and bound: " << distance << std::endl;
-	std::cout << "TSP branch and bound path: ";
-	std::vector<int> path = TSP_branch_and_bound_path();
-	for (auto i = 0; i < path.size(); i++) {
-		std::cout << path[i] << " ";
-	}
+	// Nearest neighbour 
+	std::cout << "NN distance: " << TSP_nearest_neighbour(graph) << std::endl;
 
 	auto end_branch_bound = std::chrono::high_resolution_clock::now();
 
@@ -85,10 +75,14 @@ int main() {
 		std::cout << "The next steps are for inputing a graph." << std::endl;
 		
 		// Input a graph by the console
-		Graph graph = Graph();
-
+		//Graph graph = Graph();
+		//Graph graph = Graph("dj38.tsp");
+		//Graph graph = Graph("wi29.tsp");
+		Graph graph = Graph("test.tsp");
 		std::cout << "The inputed graph is: " << std::endl;
 		graph.display();
+		//std::cout << TSP_brute_force(graph) << std::endl;
+		std::cout << TSP_nearest_neighbour(graph) << std::endl;
 
 		// Seperation line
 		std::cout << std::endl;
@@ -97,56 +91,62 @@ int main() {
 		std::cout << "Choose a method - brute force (1) or branch and bound(2)" << std::endl;
 		std::cin >> method;
 		if (method < 2) {
+
+			// Detect time for brute force
+			auto start_brute_force = std::chrono::high_resolution_clock::now();
+
 			// Call brute force
-			double distance_brute_force = TSP_brute_force(graph);
-			std::cout << "TSP brute force distance: " << distance_brute_force << std::endl;
-			std::vector<int> path_brute_force = TSP_brute_force_path();
-			std::cout << "TSP brute force path: ";
-			for (int i = 0; i < path_brute_force.size(); i++) {
-				std::cout << path_brute_force[i] << " ";
-			}
+
+			auto end_brute_force = std::chrono::high_resolution_clock::now();
+
+			std::chrono::duration<double, std::milli> duration_brute_force = start_brute_force - end_brute_force;
+			std::cout << "\n\nTime elapsed for TSP brute force: " << duration_brute_force.count();
 
 			char answer;
 			std::cout << "\nWould you like to see the other method on the same graph? (y/n)" << std::endl;
 			std::cin >> answer;
 			if (answer == 'y') {
+				// Detect time for branch and bound
+				auto start_branch_bound = std::chrono::high_resolution_clock::now();
+
 				// Call branch and bound
-				TSP_branch_and_bound_set_graph(graph);
-				double distance_branch_and_bound = TSP_branch_and_bound_distance();
-				std::cout << "TSP branch and bound: " << distance_branch_and_bound << std::endl;
-				std::cout << "TSP branch and bound path: ";
-				std::vector<int> path_branch_and_bound = TSP_branch_and_bound_path();
-				for (auto i = 0; i < path_branch_and_bound.size(); i++) {
-					std::cout << path_branch_and_bound[i] << " ";
-				}
+
+				auto end_branch_bound = std::chrono::high_resolution_clock::now();
+
+				std::chrono::duration<double, std::milli> duration_branch_bound = start_branch_bound - end_branch_bound;
+				std::cout << "\n\nTime elapsed for TSP branch and bound: " << duration_branch_bound.count();
 			}
 
 			// Add pause so the console doesn't terminate
 			std::cin.ignore();
 		}
 		else {
+			// Detect time for branch and bound
+			auto start_branch_bound = std::chrono::high_resolution_clock::now();
+
 			// Call branch and bound
-			TSP_branch_and_bound_set_graph(graph);
-			double distance_branch_and_bound = TSP_branch_and_bound_distance();
-			std::cout << "TSP branch and bound: " << distance_branch_and_bound << std::endl;
-			std::cout << "TSP branch and bound path: ";
-			std::vector<int> path_branch_and_bound = TSP_branch_and_bound_path();
-			for (auto i = 0; i < path_branch_and_bound.size(); i++) {
-				std::cout << path_branch_and_bound[i] << " ";
-			}
+
+
+			auto end_branch_bound = std::chrono::high_resolution_clock::now();
+
+			std::chrono::duration<double, std::milli> duration_branch_bound = start_branch_bound - end_branch_bound;
+			std::cout << "\n\nTime elapsed for TSP branch and bound: " << duration_branch_bound.count();
 
 			char answer;
 			std::cout << "\nWould you like to see the other method on the same graph? (y/n)" << std::endl;
 			std::cin >> answer;
 			if (answer == 'y') {
+				// Detect time for brute force
+				auto start_brute_force = std::chrono::high_resolution_clock::now();
+
 				// Call brute force
-				double distance_brute_force = TSP_brute_force(graph);
-				std::cout << "TSP brute force distance: " << distance_brute_force << std::endl;
-				std::vector<int> path_brute_force = TSP_brute_force_path();
-				std::cout << "TSP brute force path: ";
-				for (int i = 0; i < path_brute_force.size(); i++) {
-					std::cout << path_brute_force[i] << " ";
-				}
+
+
+				auto end_brute_force = std::chrono::high_resolution_clock::now();
+
+				std::chrono::duration<double, std::milli> duration_brute_force = start_brute_force - end_brute_force;
+				std::cout << "\n\nTime elapsed for TSP brute force: " << duration_brute_force.count();
+
 			}
 
 			// Add pause so the console doesn't terminate
@@ -161,4 +161,3 @@ int main() {
 
     return 0;
 }
-
